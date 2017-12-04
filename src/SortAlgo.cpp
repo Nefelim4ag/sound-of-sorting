@@ -117,6 +117,8 @@ const struct AlgoEntry g_algolist[] =
     { _("Stooge Sort"), &StoogeSort, 256, inversion_count_instrumented,
       wxEmptyString },
     { _("Slow Sort"), &SlowSort, 128, inversion_count_instrumented,
+      wxEmptyString },
+    { _("Timofey's stupid sort"), &Stupid_sort, 128, inversion_count_instrumented,
       wxEmptyString }
 };
 
@@ -1626,6 +1628,39 @@ void SlowSort(SortArray& A, int i, int j)
 void SlowSort(SortArray& A)
 {
     SlowSort(A, 0, A.size()-1);
+}
+
+// ****************************************************************************
+// *** Stupid_sort
+
+void Stupid_sort(SortArray& A, int min_index, int max_index)
+{
+        if (min_index >= max_index) return;
+
+        while (max_index - min_index > 1) {
+                for (int i = min_index; i < max_index; i++) {
+                        if (A[min_index] > A[i])
+                                A.swap(min_index, i);
+                        if (A[max_index] < A[max_index - i])
+                                A.swap(max_index, i);
+                }
+                min_index++;
+                max_index--;
+                for (int i = max_index; i > min_index; i--) {
+                        if (A[min_index] > A[i])
+                                A.swap(min_index, i);
+                        if (A[max_index] < A[i])
+                                A.swap(max_index, i);
+                }
+                min_index++;
+                max_index--;
+        }
+}
+
+
+void Stupid_sort(SortArray& A)
+{
+        Stupid_sort(A, 0, A.size() - 1);
 }
 
 // ****************************************************************************
